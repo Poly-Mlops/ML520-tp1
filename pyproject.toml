@@ -1,0 +1,47 @@
+[project]
+name = "inferapi"
+version = "0.1.0"
+description = "ML520 Lab 1"
+readme = "README.md"
+requires-python = ">=3.12"
+
+# TODO(LAB): declare the runtime dependencies here, with range constraints.
+# Start from the inherited requirements.txt, keep only what the code under src/
+# actually imports, and add what serving needs.
+# Everything development-only goes in a dependency group below, not here.
+dependencies = [
+
+]
+
+# Command line that are installed once you installed this project
+# TODO(LAB): declare the entrypoint - `<command> = "<module>:<function>"`.
+[project.scripts]
+
+# TODO(LAB): extras. Anything that is a real feature of the project but that not
+# everyone needs installed goes here rather than in a group. 
+[project.optional-dependencies]
+
+# TODO(LAB): dependency groups (PEP 735). `uv sync` installs the `dev` group by default
+[dependency-groups]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# hatchling finds src/inferapi on its own because it matches [project].name.
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["out"]
+
+[tool.ruff.lint]
+# E/F: pycodestyle + pyflakes (the baseline). I: import sorting.
+# UP: don't write Python 3.8 in a 3.12 project. B: bugbear's real-bug subset.
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    "ignore:Setting the shape on a NumPy array has been deprecated:DeprecationWarning",
+]
