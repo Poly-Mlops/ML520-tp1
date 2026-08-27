@@ -17,26 +17,42 @@ dependencies = [
     "pydantic-settings>=2.15.0",
     "scikit-learn>=1.6.1",
     "starlette>=1.6.0",
+    "pyyaml>=6.0.3",
+    "uvicorn>=0.52.4",
+    "gunicorn>=26.2.0",
+  
 ]
 
 # Command line that are installed once you installed this project
 # TODO(LAB): declare the entrypoint - `<command> = "<module>:<function>"`.
+
 [project.scripts]
+inferapi = "inferapi.cli:main"
 
 # TODO(LAB): extras. Anything that is a real feature of the project but that not
 # everyone needs installed goes here rather than in a group. 
+
 [project.optional-dependencies]
+
 scikit-learn-intelex = [
     "scikit-learn-intelex>=2026.1.0 ; sys_platform == 'linux' or (sys_platform == 'win32' and platform_machine == 'AMD64')",
 ]
 
 # TODO(LAB): dependency groups (PEP 735). `uv sync` installs the `dev` group by default
 [dependency-groups]
+
 notebooks = [
-    "jupyter",
-    "ipykernel",
-    "ipython",
-    "seaborn"
+    "jupyter>=1.1.1",
+    "ipykernel>=7.3.0",
+    "ipython>=9.16.1",
+    "seaborn>=0.13.2",
+]
+
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.4",
+    "debugpy>=1.8.21",
+   
 ]
 
 [build-system]

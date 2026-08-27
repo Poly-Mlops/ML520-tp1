@@ -1,17 +1,16 @@
 # TP1 - Rapport d'équipe
 
 Équipe : <numéro>
-Membres : <noms>
+Membres : <Abdelrahmane Ferchichi>
 
-## Question 1 - Répartition des dépendances
+- Pour trouver les runtime dependencies, il a fallu regarder les imports dans le notebook et dans les fichiers sous `src/inferapi/`. Ce sont les dépendances nécessaires pour faire tourner l'API et le code ML.
 
-Expliquez la logique de votre répartition des dépendances héritées entre
-`[project].dependencies`, les groupes de dépendances et les extras, et justifiez les
-paquets que vous avez écartés. Qu'en est-il de `scikit-learn-intelex` : où l'avez-vous
-placé, avec quelles contraintes, et que voyez-vous dans `uv.lock` pour un coéquipier
-sur une autre architecture ?
+- Les groupes de dépendances : nous avons deux groupes. `notebooks` correspond à l'exécution des notebooks (jupyter, ipykernel, ipython, seaborn), ces dépendances ne sont pas utiles en production. Le groupe `dev` contient ce qui est utilisé uniquement durant le développement : tester (pytest), qualité (ruff) et le debug (debugpy).
 
-> Votre réponse ici.
+- Tout ce qui a été retiré du requirements.txt correspond à ce qui ne ressortait pas avec la commande `grep -r "import" src/` qui va chercher les imports sous src. Par exemple, seaborn n'apparaît pas dans les imports de src et uniquement dans le notebook `work.ipynb`.
+
+- Pour `scikit-learn-intelex`, il est placé dans les extras `[project.optional-dependencies]` car c'est une fonctionnalité optionnelle : c'est une librairie qui permet d'accélérer certains traitements mais qui fonctionne seulement en x86 (Linux) ou AMD64 (Windows). `uv.lock` contient les contraintes pour toutes les plateformes : par exemple sur mon Mac ARM, cela ne s'installe pas, mais pour un coéquipier s'il est équipé de Linux ou Windows, cela va s'installer (il peut aussi choisir de ne pas l'installer). La syntaxe qui respecte PEP est : `sys_platform == 'linux' or (sys_platform == 'win32' and platform_machine == 'AMD64')`.
+
 
 ## Question 2 - Les métriques et le seuil
 
