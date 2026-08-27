@@ -10,6 +10,9 @@ requires-python = ">=3.12"
 # actually imports, and add what serving needs.
 # Everything development-only goes in a dependency group below, not here.
 dependencies = [
+"pandas==2.2.3",
+"scikit-learn==1.6.1",
+"seaborn==0.13.2"
 
 ]
 
