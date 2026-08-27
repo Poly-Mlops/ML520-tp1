@@ -10,10 +10,13 @@ requires-python = ">=3.12"
 # actually imports, and add what serving needs.
 # Everything development-only goes in a dependency group below, not here.
 dependencies = [
+    "fastapi>=0.141.1",
     "pandas==2.2.3",
     "pyarrow>=25.0.1",
-    "scikit-learn==1.6.1",
-    "seaborn==0.13.2",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.15.0",
+    "scikit-learn>=1.6.1",
+    "starlette>=1.6.0",
 ]
 
 # Command line that are installed once you installed this project
@@ -23,9 +26,18 @@ dependencies = [
 # TODO(LAB): extras. Anything that is a real feature of the project but that not
 # everyone needs installed goes here rather than in a group. 
 [project.optional-dependencies]
+scikit-learn-intelex = [
+    "scikit-learn-intelex>=2026.1.0 ; sys_platform == 'linux' or (sys_platform == 'win32' and platform_machine == 'AMD64')",
+]
 
 # TODO(LAB): dependency groups (PEP 735). `uv sync` installs the `dev` group by default
 [dependency-groups]
+notebooks = [
+    "jupyter",
+    "ipykernel",
+    "ipython",
+    "seaborn"
+]
 
 [build-system]
 requires = ["hatchling"]
