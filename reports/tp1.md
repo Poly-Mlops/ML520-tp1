@@ -5,7 +5,7 @@ Membres : <Abdelrahmane Ferchichi>
 
 - Pour trouver les runtime dependencies, il a fallu regarder les imports dans le notebook et dans les fichiers sous `src/inferapi/`. Ce sont les dépendances nécessaires pour faire tourner l'API et le code ML.
 
-- Les groupes de dépendances : nous avons deux groupes. `notebooks` correspond à l'exécution des notebooks (jupyter, ipykernel, ipython, seaborn), ces dépendances ne sont pas utiles en production. Le groupe `dev` contient ce qui est utilisé uniquement durant le développement : tester (pytest), qualité (ruff) et le debug (debugpy).
+- Les groupes de dépendances : nous avons deux groupes. `notebooks` correspond à l'exécution des notebooks (jupyter, ipykernel, ipython, seaborn), ces dépendances ne sont pas utiles en production. Le groupe `dev` contient ce qui est utilisé uniquement durant le développement : tester (pytest), qualité (ruff) et le debug (debugpy). Analyser le fichier Makefile a permis de trouver ces dépendances.
 
 - Tout ce qui a été retiré du requirements.txt correspond à ce qui ne ressortait pas avec la commande `grep -r "import" src/` qui va chercher les imports sous src. Par exemple, seaborn n'apparaît pas dans les imports de src et uniquement dans le notebook `work.ipynb`.
 
