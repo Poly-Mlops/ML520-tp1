@@ -62,7 +62,8 @@ def build_model(training: TrainingConfig) -> Pipeline:
     data_processor = ColumnTransformer(
         [
             ("numerical", StandardScaler(),NUMERIC_COLUMNS),
-            ("categorical_fixed",OneHotEncoder(categories=[KNOWN_CATEGORIES[c] for c in FIXED_CATEGORY_COLUMNS], handle_unknown="ignore")),
+            ("categorical_fixed",OneHotEncoder(categories=[KNOWN_CATEGORIES[c] for c in FIXED_CATEGORY_COLUMNS], 
+                                               handle_unknown="ignore"), FIXED_CATEGORY_COLUMNS),
             ("categorical_learned", OneHotEncoder(handle_unknown="infrequent_if_exist"), LEARNED_CATEGORY_COLUMNS),
 
         ]
@@ -71,7 +72,8 @@ def build_model(training: TrainingConfig) -> Pipeline:
     return Pipeline(
         [
             ("data_processor", data_processor),
-            ("model", RandomForestClassifier(n_estimators=training.n_estimators, max_depth=training.max_depth, random_state=training.seed))
+            ("model", RandomForestClassifier(n_estimators=training.n_estimators, 
+                                             max_depth=training.max_depth, random_state=training.seed))
         ]
     )
     
@@ -82,7 +84,7 @@ def get_model_evaluation_metrics(
     model: Pipeline, x: pd.DataFrame, y: pd.Series, decision_threshold: float = 0.5
 ) -> dict[str, float]: 
     probabilities = model.predict_proba(x)[:,1]
-    predictions = (probalities >= decision_threshold).astype(int)
+    predictions = (probabilities >= decision_threshold).astype(int)
     return{
         "positive_rate":float(y.mean()),
         "accuracy":accuracy_score(y,predictions),
@@ -95,7 +97,12 @@ def get_model_evaluation_metrics(
 
 # TODO(LAB): fit, and nothing else. Validation/evaluation will be done in training_procedure
 # TODO(LAB): Add a debug log statement seeing the split shapes
-def train(train_config: TrainingConfig, dataset: Dataset) -> Pipeline: ...
+def train(train_config: TrainingConfig, dataset: Dataset) -> Pipeline:
+    model = build_model(train_config)
+    # checked in data.py to see the already split training data
+    model.fit(dataset.train_x,dataset.train_y)
+    logger.debug(...)
+    return model
 
 
 def persist_model(model: Pipeline, output: Path) -> None:
