@@ -121,4 +121,5 @@ def training_procedure(
     dataframe: pd.DataFrame,
     output_model_path: Path | str,
     overwrite_model: bool = True,
-) -> tuple[Pipeline, dict[str, float]]: ...
+) -> tuple[Pipeline, dict[str, float]]: 
+    dataframe = get_dataset(dataframe)
