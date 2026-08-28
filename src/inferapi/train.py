@@ -80,7 +80,17 @@ def build_model(training: TrainingConfig) -> Pipeline:
 # TODO(LAB): Implement the same metrics as the notebook
 def get_model_evaluation_metrics(
     model: Pipeline, x: pd.DataFrame, y: pd.Series, decision_threshold: float = 0.5
-) -> dict[str, float]: ...
+) -> dict[str, float]: 
+    probabilities = model.predict_proba(x)[:,1]
+    predictions = (probalities >= decision_threshold).astype(int)
+    return{
+        "positive_rate":float(y.mean()),
+        "accuracy":accuracy_score(y,predictions),
+        "precision":precision_score(y, predictions,zero_division=0),
+        "recall":recall_score(y,predictions,zero_division=0),
+        "roc_auc":roc_auc_score(y,probabilities),
+        "average_precision":average_precision_score(y,probabilities)
+    }
 
 
 # TODO(LAB): fit, and nothing else. Validation/evaluation will be done in training_procedure
