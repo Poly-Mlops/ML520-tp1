@@ -46,11 +46,17 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--output", type=Path, required=True, help="where to write the artifact")
     # TODO(LAB): Implement the rest of the train parser with the following arguments:
     # --data
+    train.add_argument("--data",type=Path)
     # --n-estimators
+    train.add_argument("--n-estimators",type=int)
     # --max-depth
+    train.add_argument("--max-depth", type=int)
     # --seed
+    train.add_argument("--seed",type=int)
     # --decision-threshold
+    train.add_argument("--decision-threshold", type=float)
     # --overwrite
+    train.add_argument("--overwrite", action="store_true" )
     ...
 
     train.set_defaults(
@@ -93,7 +99,8 @@ def run_data_convert(args: argparse.Namespace, settings: TrainingSettings) -> in
 
 # TODO(LAB): load the frame and hand it to training_procedure, with the output path
 #            and the overwrite decision this invocation asked for.
-def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int: ...
+def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int: 
+    training_procedure(train_config=settings, dataframe:Data, output_model_path="./data", overwrite_model=True)
 
 
 def main() -> int:

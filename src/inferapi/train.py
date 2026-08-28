@@ -58,7 +58,23 @@ LEARNED_CATEGORY_COLUMNS = [
 # TODO(LAB): the pipeline keeps its two named steps, `data_processor` (the
 # ColumnTransformer) and `model`. Hyperparameters come from `training`, never from
 # literals in this file.
-def build_model(training: TrainingConfig) -> Pipeline: ...
+def build_model(training: TrainingConfig) -> Pipeline: 
+    data_processor = ColumnTransformer(
+        [
+            ("numerical", StandardScaler(),NUMERIC_COLUMNS),
+            ("categorical_fixed",OneHotEncoder(categories=[KNOWN_CATEGORIES[c] for c in FIXED_CATEGORY_COLUMNS], handle_unknown="ignore")),
+            ("categorical_learned", OneHotEncoder(handle_unknown="infrequent_if_exist"), LEARNED_CATEGORY_COLUMNS),
+
+        ]
+
+    )
+    return Pipeline(
+        [
+            ("data_processor", data_processor),
+            ("model", RandomForestClassifier(n_estimators=training.n_estimators, max_depth=training.max_depth, random_state=training.seed))
+        ]
+    )
+    
 
 
 # TODO(LAB): Implement the same metrics as the notebook
