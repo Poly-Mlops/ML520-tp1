@@ -101,7 +101,11 @@ def train(train_config: TrainingConfig, dataset: Dataset) -> Pipeline:
     model = build_model(train_config)
     # checked in data.py to see the already split training data
     model.fit(dataset.train_x,dataset.train_y)
-    logger.debug(...)
+    # inspired from logger in data.py , log the shape -> len of each split
+    logger.debug("split data from data.py  train_x=%d train_y=%d val_x=%d val_y=%d test_x=%d test_y=%d",
+                 len(dataset.train_x),len(dataset.train_y), len(dataset.val_x),len(dataset.val_y),
+                len(dataset.test_x), len(dataset.test_y)
+                 )
     return model
 
 
