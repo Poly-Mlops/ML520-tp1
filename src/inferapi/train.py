@@ -8,6 +8,7 @@ Keep the signature and write the body of the functions
 
 import logging
 from pathlib import Path
+from pyexpat import model
 
 import joblib
 import pandas as pd
@@ -61,37 +62,43 @@ LEARNED_CATEGORY_COLUMNS = [
 def build_model(training: TrainingConfig) -> Pipeline:
     data_processor = ColumnTransformer(
         [
-            ("numerical", StandardScaler(),NUMERIC_COLUMNS),
-            ("categorical_fixed",OneHotEncoder(categories=[KNOWN_CATEGORIES[c] for c in FIXED_CATEGORY_COLUMNS],
-                                               handle_unknown="ignore"), FIXED_CATEGORY_COLUMNS),
+            ("numerical", StandardScaler(), NUMERIC_COLUMNS),
+            (
+                "categorical_fixed",
+                OneHotEncoder(
+                    categories=[KNOWN_CATEGORIES[c] for c in FIXED_CATEGORY_COLUMNS], handle_unknown="ignore"
+                ),
+                FIXED_CATEGORY_COLUMNS,
+            ),
             ("categorical_learned", OneHotEncoder(handle_unknown="infrequent_if_exist"), LEARNED_CATEGORY_COLUMNS),
-
         ]
-
     )
     return Pipeline(
         [
             ("data_processor", data_processor),
-            ("model", RandomForestClassifier(n_estimators=training.n_estimators,
-                                             max_depth=training.max_depth, random_state=training.seed))
+            (
+                "model",
+                RandomForestClassifier(
+                    n_estimators=training.n_estimators, max_depth=training.max_depth, random_state=training.seed
+                ),
+            ),
         ]
     )
-
 
 
 # TODO(LAB): Implement the same metrics as the notebook
 def get_model_evaluation_metrics(
     model: Pipeline, x: pd.DataFrame, y: pd.Series, decision_threshold: float = 0.5
 ) -> dict[str, float]:
-    probabilities = model.predict_proba(x)[:,1]
+    probabilities = model.predict_proba(x)[:, 1]
     predictions = (probabilities >= decision_threshold).astype(int)
-    return{
-        "positive_rate":float(y.mean()),
-        "accuracy":accuracy_score(y,predictions),
-        "precision":precision_score(y, predictions,zero_division=0),
-        "recall":recall_score(y,predictions,zero_division=0),
-        "roc_auc":roc_auc_score(y,probabilities),
-        "average_precision":average_precision_score(y,probabilities)
+    return {
+        "positive_rate": float(y.mean()),
+        "accuracy": accuracy_score(y, predictions),
+        "precision": precision_score(y, predictions, zero_division=0),
+        "recall": recall_score(y, predictions, zero_division=0),
+        "roc_auc": roc_auc_score(y, probabilities),
+        "average_precision": average_precision_score(y, probabilities),
     }
 
 
@@ -100,12 +107,17 @@ def get_model_evaluation_metrics(
 def train(train_config: TrainingConfig, dataset: Dataset) -> Pipeline:
     model = build_model(train_config)
     # checked in data.py to see the already split training data
-    model.fit(dataset.train_x,dataset.train_y)
+    model.fit(dataset.train_x, dataset.train_y)
     # inspired from logger in data.py , log the shape -> len of each split
-    logger.debug("split data from data.py  train_x=%d train_y=%d val_x=%d val_y=%d test_x=%d test_y=%d",
-                 len(dataset.train_x),len(dataset.train_y), len(dataset.val_x),len(dataset.val_y),
-                len(dataset.test_x), len(dataset.test_y)
-                 )
+    logger.debug(
+        "split data from data.py  train_x=%d train_y=%d val_x=%d val_y=%d test_x=%d test_y=%d",
+        len(dataset.train_x),
+        len(dataset.train_y),
+        len(dataset.val_x),
+        len(dataset.val_y),
+        len(dataset.test_x),
+        len(dataset.test_y),
+    )
     return model
 
 
@@ -122,4 +134,26 @@ def training_procedure(
     output_model_path: Path | str,
     overwrite_model: bool = True,
 ) -> tuple[Pipeline, dict[str, float]]:
-    train(build_model(persist_model()))
+
+#from data.py
+    dataset = get_dataset(
+        dataframe, test_size=train_config.test_size, val_size=train_config.val_size, seed=train_config.seed
+    )
+
+    model = train(train_config, dataset)
+
+
+    metrics = get_model_evaluation_metrics(
+        model, dataset.val_x, dataset.val_y, decision_threshold=train_config.decision_threshold
+    )
+
+
+
+    persist_model(model,Path(output_model_path))
+
+# display infos returned from what i find in notebook and used to make get_model_evaluation_metrics
+    logger.info("Model infos after training positive_rate=%s accuracy=%s precision=% recall=%s roc_auc=%s average_precision=%s " ,
+        metrics["positive_rate"], metrics["accuracy"],metrics["precision"],
+        metrics["recall"],metrics["roc_auc"],metrics["average_precision"])
+
+    return model, metrics
