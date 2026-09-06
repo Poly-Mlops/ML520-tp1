@@ -16,10 +16,12 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from typing_extensions import override
+
 from inferapi.config import TrainingSettings
 from inferapi.data import csv_to_parquet, load_raw
 from inferapi.logging_setup import setup_logging
-from inferapi.train import training_procedure
+from inferapi.train import train, training_procedure
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +47,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     train.add_argument("--output", type=Path, required=True, help="where to write the artifact")
     # TODO(LAB): Implement the rest of the train parser with the following arguments:
+        #
+        # type and action from config , class TrainingConfig
     # --data
     train.add_argument("--data",type=Path)
     # --n-estimators
@@ -57,7 +61,7 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--decision-threshold", type=float)
     # --overwrite
     train.add_argument("--overwrite", action="store_true" )
-    ...
+
 
     train.set_defaults(
         run=run_train,
@@ -99,9 +103,10 @@ def run_data_convert(args: argparse.Namespace, settings: TrainingSettings) -> in
 
 # TODO(LAB): load the frame and hand it to training_procedure, with the output path
 #            and the overwrite decision this invocation asked for.
-def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int: 
-    training_procedure(train_config=settings, dataframe:Data, output_model_path="./data", overwrite_model=True)
-
+def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int:
+    frame = load_raw(settings.data.parquet_path)
+    training_procedure(train_config=settings.training,dataframe=frame,  output_model_path=args.output, overwrite_model=args.override)
+    return 0
 
 def main() -> int:
     parser = build_parser()

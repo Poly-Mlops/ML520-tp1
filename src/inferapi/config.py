@@ -28,7 +28,6 @@ class TrainingConfig(BaseModel):
     """Contains hyperparameters and other potential flags"""
 
     model_config = ConfigDict(extra="forbid")
-
     n_estimators: int = 100
     max_depth: int = 8
     test_size: float = 0.2

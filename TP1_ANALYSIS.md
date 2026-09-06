@@ -48,7 +48,7 @@ Total : **19 commentaires** répartis dans 7 fichiers.
 | 60 | `add api_token, and the validation that refuses to load when the check…` | ❌ Non commencé |
 | 121 | `declare the sections the serving entrypoint needs, and only those.` | ❌ Non commencé (`InferApiSettings` est vide `class …(WithYamlSources): ...`) |
 
-**Actions nécessaires :**
+**-s nécessaires :**
 - Ajouter `api_token: SecretStr` dans `SecurityConfig`
 - Ajouter un `model_validator` qui lève `ValidationError` si `enable_api_key_check=True` et pas de jeton
 - Remplir `InferApiSettings` avec (et seulement) les sections serving : `serving`, `security`, `logging`
