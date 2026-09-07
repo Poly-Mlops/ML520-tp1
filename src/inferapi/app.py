@@ -208,9 +208,15 @@ def create_app(
 
         # TODO(LAB): Add a log statement with:
         # request_id, model_version, latency_ms and what was predicted.
-        latency_ms = (ended -started)*1000
-        logger.info("The prediction is finish with :request_id=%s, model_version=%s, latency_ms=%s, label=%s , probability=%s",
-            request_id, _model_version, latency_ms, label, probability)
+        latency_ms = (ended - started) * 1000
+        logger.info(
+            "The prediction is finish with :request_id=%s, model_version=%s, latency_ms=%s, label=%s , probability=%s",
+            request_id,
+            _model_version,
+            latency_ms,
+            label,
+            probability,
+        )
         return PredictResponse(prediction=label, probability=probability, model_version=_model_version)
 
     return app

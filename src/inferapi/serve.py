@@ -24,7 +24,6 @@ def load_predictor(settings: InferApiSettings) -> Predictor:
     return SklearnPredictor(model_path, threshold)
 
 
-
 # What gunicorn and uvicorn import
 # TODO(LAB): Implement this
 config = InferApiSettings()

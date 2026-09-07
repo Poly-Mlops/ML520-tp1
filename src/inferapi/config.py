@@ -4,8 +4,9 @@ YAML provides the committed values; environment variables and .env override them
 with `__` as the nesting separator and ML520_ as the prefix
 (e.g. ML520_SERVING__PREDICTION_THRESHOLD=0.35).
 """
-from typing import Self
+
 from pathlib import Path
+from typing import Self
 
 from pydantic import BaseModel, ConfigDict, SecretStr, model_validator
 from pydantic_settings import (
@@ -61,7 +62,6 @@ class LoggingConfig(BaseModel):
 class SecurityConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-
     # Usually, I like to add a "use_<feature>" or "enable_<feature>", ex:
     # enable_api_key_check
     # instead of relying on _values_ of those.
@@ -70,19 +70,11 @@ class SecurityConfig(BaseModel):
     api_token: SecretStr | None = None
     enable_api_key_check: bool = True
 
-    # TODO(LAB): add `api_token`, and the validation that refuses to load when the check
-    # is on without one. The token is never in the YAML: .env, or the environment.
     @model_validator(mode="after")
     def check_api_token(self) -> Self:
         if self.enable_api_key_check and not self.api_token:
             raise ValueError("Api token n'est pas present")
         return self
-
-
-
-
-
-
 
 
 class WithYamlSources(BaseSettings):
@@ -126,7 +118,6 @@ class TrainingSettings(WithYamlSources):
         #            sets extra="forbid"
         extra="ignore",
     )
-
 
     data: DataConfig
     training: TrainingConfig

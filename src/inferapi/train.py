@@ -133,25 +133,29 @@ def training_procedure(
     overwrite_model: bool = True,
 ) -> tuple[Pipeline, dict[str, float]]:
 
-#from data.py
+    # from data.py
     dataset = get_dataset(
         dataframe, test_size=train_config.test_size, val_size=train_config.val_size, seed=train_config.seed
     )
 
     model = train(train_config, dataset)
 
-
     metrics = get_model_evaluation_metrics(
         model, dataset.val_x, dataset.val_y, decision_threshold=train_config.decision_threshold
     )
 
+    persist_model(model, Path(output_model_path))
 
-
-    persist_model(model,Path(output_model_path))
-
-# display infos returned from what i find in notebook and used to make get_model_evaluation_metrics
-    logger.info("Model infos after training positive_rate=%s accuracy=%s precision=% recall=%s roc_auc=%s average_precision=%s " ,
-        metrics["positive_rate"], metrics["accuracy"],metrics["precision"],
-        metrics["recall"],metrics["roc_auc"],metrics["average_precision"])
+    # display infos returned from what i find in notebook and used to make get_model_evaluation_metrics
+    logger.info(
+        "Model infos after training ,positive_rate=%s accuracy=%s precision=%s "
+        "recall=%s roc_auc=%s average_precision=%s ",
+        metrics["positive_rate"],
+        metrics["accuracy"],
+        metrics["precision"],
+        metrics["recall"],
+        metrics["roc_auc"],
+        metrics["average_precision"],
+    )
 
     return model, metrics

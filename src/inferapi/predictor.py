@@ -53,13 +53,13 @@ class SklearnPredictor(Predictor):
         self.threshold = threshold
 
     @override
-    def predict(self,features):
+    def predict(self, features):
         model = joblib.load(self.artifact_path)
-        probabilities = model.predict_proba(features)[:,1]
-        predictions =(probabilities >= self.threshold).astype(int)
+        probabilities = model.predict_proba(features)[:, 1]
+        predictions = (probabilities >= self.threshold).astype(int)
         return (int(predictions[0]), float(probabilities[0]))
 
-    #file_creation_path was not used
+    # file_creation_path was not used
     @override
     def get_version(self) -> str:
         return str(file_creation_time(self.artifact_path))

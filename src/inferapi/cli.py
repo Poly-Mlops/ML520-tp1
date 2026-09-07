@@ -16,12 +16,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from typing_extensions import override
-
 from inferapi.config import TrainingSettings
 from inferapi.data import csv_to_parquet, load_raw
 from inferapi.logging_setup import setup_logging
-from inferapi.train import train, training_procedure
+from inferapi.train import training_procedure
 
 logger = logging.getLogger(__name__)
 
@@ -43,27 +41,26 @@ def build_parser() -> argparse.ArgumentParser:
         config_flags={"csv": "data.csv_path", "parquet": "data.parquet_path"},
     )
 
-    train = commands.add_parser("train", help="train the model and write the artifact")
+    train_parser = commands.add_parser("train", help="train the model and write the artifact")
 
-    train.add_argument("--output", type=Path, required=True, help="where to write the artifact")
+    train_parser.add_argument("--output", type=Path, required=True, help="where to write the artifact")
     # TODO(LAB): Implement the rest of the train parser with the following arguments:
-        #
-        # type and action from config , class TrainingConfig
+    #
+    # type and action from config , class TrainingConfig
     # --data
-    train.add_argument("--data",type=Path)
+    train_parser.add_argument("--data", type=Path)
     # --n-estimators
-    train.add_argument("--n-estimators",type=int)
+    train_parser.add_argument("--n-estimators", type=int)
     # --max-depth
-    train.add_argument("--max-depth", type=int)
+    train_parser.add_argument("--max-depth", type=int)
     # --seed
-    train.add_argument("--seed",type=int)
+    train_parser.add_argument("--seed", type=int)
     # --decision-threshold
-    train.add_argument("--decision-threshold", type=float)
+    train_parser.add_argument("--decision-threshold", type=float)
     # --overwrite
-    train.add_argument("--overwrite", action="store_true" )
+    train_parser.add_argument("--overwrite", action="store_true")
 
-
-    train.set_defaults(
+    train_parser.set_defaults(
         run=run_train,
         # --output and --overwrite are absent on purpose: they say what this run does
         # with its result, not what the project is configured to be.
@@ -105,8 +102,11 @@ def run_data_convert(args: argparse.Namespace, settings: TrainingSettings) -> in
 #            and the overwrite decision this invocation asked for.
 def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int:
     frame = load_raw(settings.data.parquet_path)
-    training_procedure(train_config=settings.training,dataframe=frame,  output_model_path=args.output, overwrite_model=args.overwrite)
+    training_procedure(
+        train_config=settings.training, dataframe=frame, output_model_path=args.output, overwrite_model=args.overwrite
+    )
     return 0
+
 
 def main() -> int:
     parser = build_parser()

@@ -11,6 +11,9 @@
 /data
 /out
 
+## Guide de travail (pas pour la remise)
+GUIDE_RUN.md
+
 ## Model artifacts
 *.joblib
 *.pkl

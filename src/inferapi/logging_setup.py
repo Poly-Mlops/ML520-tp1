@@ -41,15 +41,11 @@ def setup_logging(log_settings: LoggingConfig) -> None:
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
 
-
-
-
     root = logging.getLogger()
     root.handlers.clear()
     root.addHandler(stdout_handler)
     # TODO(LAB): Make sure we add the debug file if configured to do so
     root.addHandler(file_handler)
-
 
     # third-party libraries stay at INFO on the root
     root.setLevel(logging.INFO)
