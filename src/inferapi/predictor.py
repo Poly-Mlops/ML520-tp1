@@ -59,7 +59,7 @@ class SklearnPredictor(Predictor):
         predictions =(probabilities >= self.threshold).astype(int)
         return (int(predictions[0]), float(probabilities[0]))
 
-    @override
     #file_creation_path was not used
+    @override
     def get_version(self) -> str:
         return str(file_creation_time(self.artifact_path))

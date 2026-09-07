@@ -34,12 +34,22 @@ def setup_logging(log_settings: LoggingConfig) -> None:
     # that always captures DEBUG, whatever stdout is set to.
     # Ensure you use:
     #   log_settings.debug_file.parent.mkdir(parents=True, exist_ok=True)
+    #
+    # create out/log defined in config.py
+    log_settings.debug_file.parent.mkdir(parents=True, exist_ok=True)
+    file_handler = logging.FileHandler(filename=log_settings.debug_file, encoding="utf-8", mode="a")
+    file_handler.setFormatter(formatter)
+    file_handler.setLevel(logging.DEBUG)
+
+
+
 
     root = logging.getLogger()
     root.handlers.clear()
     root.addHandler(stdout_handler)
     # TODO(LAB): Make sure we add the debug file if configured to do so
-    ...
+    root.addHandler(file_handler)
+
 
     # third-party libraries stay at INFO on the root
     root.setLevel(logging.INFO)

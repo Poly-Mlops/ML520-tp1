@@ -127,7 +127,7 @@ graph TD
 | 3 | C | A, B | `config.py` : `SecurityConfig` (`api_token`) puis `InferApiSettings` | ✅ |
 | 4 | D | A, B, C | `predictor.py` : `SklearnPredictor` | ✅ |
 | 5 | E | D | `train.py` : `build_model`, `get_model_evaluation_metrics`, `train`, `training_procedure` | ✅ |
-| 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ⬜ |
+| 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ✅ |
 | 7 | I | D, E, C | `cli.py` : `run_train` | ✅ |
 | 8 | G | C | (rien : `api_token` est déjà dans le TODO de `config.py`) | ✅ |
 | 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | ⬜ |

@@ -4,8 +4,7 @@ YAML provides the committed values; environment variables and .env override them
 with `__` as the nesting separator and ML520_ as the prefix
 (e.g. ML520_SERVING__PREDICTION_THRESHOLD=0.35).
 """
-
-from _typeshed import Self
+from typing import Self
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, SecretStr, model_validator
