@@ -14,13 +14,18 @@ with something else.
 
 from inferapi.app import create_app
 from inferapi.config import InferApiSettings
-from inferapi.predictor import Predictor
+from inferapi.predictor import Predictor, SklearnPredictor
 
 
 # TODO(LAB): Implement this
-def load_predictor(settings: InferApiSettings) -> Predictor: ...
+def load_predictor(settings: InferApiSettings) -> Predictor:
+    model_path = settings.serving.model_path
+    threshold = settings.serving.prediction_threshold
+    return SklearnPredictor(model_path, threshold)
+
 
 
 # What gunicorn and uvicorn import
 # TODO(LAB): Implement this
-app = create_app(...)
+config = InferApiSettings()
+app = create_app(config, load_predictor)

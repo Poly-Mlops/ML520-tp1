@@ -62,33 +62,21 @@ class SecurityConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-
-
     # Usually, I like to add a "use_<feature>" or "enable_<feature>", ex:
     # enable_api_key_check
     # instead of relying on _values_ of those.
     # While this makes the software more reliable, it is more maintenance
     # But now the config is very clear
-    api_token : SecretStr
+    api_token: SecretStr |
     enable_api_key_check: bool = True
+
     # TODO(LAB): add `api_token`, and the validation that refuses to load when the check
     # is on without one. The token is never in the YAML: .env, or the environment.
-    class SecurityConfig(BaseModel):
-        model_config = ConfigDict(extra="forbid")
-
-        # Usually, I like to add a "use_<feature>" or "enable_<feature>", ex:
-        # enable_api_key_check
-        # instead of relying on _values_ of those.
-        # While this makes the software more reliable, it is more maintenance
-        # But now the config is very clear
-        api_token: SecretStr
-        enable_api_key_check: bool = True
-
-        @model_validator(mode="after")
-        def check_api_token(self) -> Self:
-            if not self.api_token and enable_api_key_check:
-                raise ValueError("Api token n'est pas present")
-            return self
+    @model_validator(mode="after")
+    def check_api_token(self) -> Self:
+        if self.enable_api_key_check and not self.api_token:
+            raise ValueError("Api token n'est pas present")
+        return self
 
 
 

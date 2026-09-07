@@ -130,7 +130,7 @@ graph TD
 | 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ✅ |
 | 7 | I | D, E, C | `cli.py` : `run_train` | ✅ |
 | 8 | G | C | (rien : `api_token` est déjà dans le TODO de `config.py`) | ✅ |
-| 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | ⬜ |
+| 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | 🔶 (`serve.py` fait, `app.py` à faire) |
 | 10 | F | tout | (preuves de debug dans le rapport) | ⬜ |
 
 #### TODO(LAB)
@@ -145,14 +145,14 @@ graph TD
 | 6 | `SecurityConfig` : ajouter `api_token` + validation | `config.py` | C/G | #7 | ✅ |
 | 7 | `InferApiSettings` : déclarer les sections du service | `config.py` | C | — | ✅ |
 | 8 | `SklearnPredictor` : implémenter la classe | `predictor.py` | D/J | #3 | ✅ |
-| 9 | `load_predictor` + l'`app` de niveau module | `serve.py` | J | #1, #8 | ⬜ |
-| 10 | handler fichier (`out/logs/app.log`, toujours `DEBUG`) | `logging_setup.py` | H | #7 | ⬜ |
-| 11 | `setup_logging` : ajouter le fichier si configuré | `logging_setup.py` | H | #10 | ⬜ |
+| 9 | `load_predictor` + l'`app` de niveau module | `serve.py` | J | #1, #8 | ✅ |
+| 10 | handler fichier (`out/logs/app.log`, toujours `DEBUG`) | `logging_setup.py` | H | #7 | ✅ |
+| 11 | `setup_logging` : ajouter le fichier si configuré | `logging_setup.py` | H | #10 | ✅ |
 | 12 | la ligne `prediction_completed` | `app.py` | J | #9 | ⬜ |
 
 *« Dépend de » = les numéros de TODO qu'il faut avoir écrits avant. Exemple : #2 (`training_procedure`) appelle #3 (`build_model`), #4 (`get_model_evaluation_metrics`) et #5 (`train`).*
 
-**Dernière vérification (à l'instant) :** `uv run pytest -q` → 7 passes, 0 échec ; `uv run ruff check src` → 10 avertissements restants. Prochain blocage : TODO #6 (`SecurityConfig` → `api_token` + validation) puis #7 (`InferApiSettings`), #10-#11 (`logging_setup.py`), #9 (`serve.py`) et #12 (`app.py`). Ne pas oublier : copier `.env.example` → `.env` (le token `ML520_SECURITY__API_TOKEN=replace-me` y est) avant d'écrire `SecurityConfig`.
+**Dernière vérification (à l'instant) :** `uv run pytest -q` → 7 passes, 0 échec ; `uv run ruff check src` → 9 avertissements restants (dans `app.py`, `cli.py`, `config.py`, `train.py`). Prochain blocage : TODO #12 (`app.py` → `prediction_completed`) et les avertissements restants. Ne pas oublier : copier `.env.example` → `.env` (le token `ML520_SECURITY__API_TOKEN=replace-me` y est) avant d'écrire `SecurityConfig`.
 
 ## ⚠️ Pièges récurrents
 
