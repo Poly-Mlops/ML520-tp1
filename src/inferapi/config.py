@@ -67,7 +67,7 @@ class SecurityConfig(BaseModel):
     # instead of relying on _values_ of those.
     # While this makes the software more reliable, it is more maintenance
     # But now the config is very clear
-    api_token: SecretStr |
+    api_token: SecretStr | None = None
     enable_api_key_check: bool = True
 
     # TODO(LAB): add `api_token`, and the validation that refuses to load when the check
