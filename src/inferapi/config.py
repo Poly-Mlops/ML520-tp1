@@ -137,6 +137,20 @@ class TrainingSettings(WithYamlSources):
 # Serving has no business knowing n_estimators.
 class InferApiSettings(WithYamlSources):
     """Everything the serving entrypoint needs (no `training` section)."""
+
+    model_config = SettingsConfigDict(
+        yaml_file="configs/config.yaml",
+        env_file=".env",
+        env_nested_delimiter="__",
+        # This means we can use ML520_<value> to set fields of this object
+        env_prefix="ML520_",
+        # NOTE(LAB): Since we are using the same config.yaml file
+        #            for both Training and InferAPI, we must set this to "ignore".
+        #            Note that nonetheless, each BaseModel (ex: logging),
+        #            sets extra="forbid"
+        extra="ignore",
+    )
+
     data: DataConfig
     serving: ServingConfig
     security: SecurityConfig
