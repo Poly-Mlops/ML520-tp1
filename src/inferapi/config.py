@@ -5,6 +5,7 @@ with `__` as the nesting separator and ML520_ as the prefix
 (e.g. ML520_SERVING__PREDICTION_THRESHOLD=0.35).
 """
 
+from _typeshed import Self
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, SecretStr, model_validator
@@ -61,12 +62,40 @@ class LoggingConfig(BaseModel):
 class SecurityConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+
+
+
     # Usually, I like to add a "use_<feature>" or "enable_<feature>", ex:
     # enable_api_key_check
     # instead of relying on _values_ of those.
     # While this makes the software more reliable, it is more maintenance
     # But now the config is very clear
+    api_token : SecretStr
     enable_api_key_check: bool = True
+    # TODO(LAB): add `api_token`, and the validation that refuses to load when the check
+    # is on without one. The token is never in the YAML: .env, or the environment.
+    class SecurityConfig(BaseModel):
+        model_config = ConfigDict(extra="forbid")
+
+        # Usually, I like to add a "use_<feature>" or "enable_<feature>", ex:
+        # enable_api_key_check
+        # instead of relying on _values_ of those.
+        # While this makes the software more reliable, it is more maintenance
+        # But now the config is very clear
+        api_token: SecretStr
+        enable_api_key_check: bool = True
+
+        @model_validator(mode="after")
+        def check_api_token(self) -> Self:
+            if not self.api_token and enable_api_key_check:
+                raise ValueError("Api token n'est pas present")
+            return self
+
+
+
+
+
+
 
 
 class WithYamlSources(BaseSettings):
@@ -119,4 +148,9 @@ class TrainingSettings(WithYamlSources):
 
 # TODO(LAB): declare the sections the serving entrypoint needs, and only those.
 # Serving has no business knowing n_estimators.
-class InferApiSettings(WithYamlSources): ...
+class InferApiSettings(WithYamlSources):
+    """Everything the serving entrypoint needs (no `training` section)."""
+    data: DataConfig
+    serving: ServingConfig
+    security: SecurityConfig
+    logging: LoggingConfig

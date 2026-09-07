@@ -106,6 +106,16 @@ graph TD
 
 **Règle :** dans une tâche, on implémente le `TODO(LAB)` mentionné dans `tp1` **pendant** cette tâche. Les TODO ne sont pas à faire avant les tâches.
 
+### Comment vérifier que ton code fonctionne
+
+**Ne pas se fier à `uv run pytest -q` seul** : la plupart des tests ne testent rien ; si tu n'as pas implémenté le TODO(LAB), ils passent quand même.
+
+**La méthode :**
+
+1. Ouvre `TP1.md` → lit la **tâche** en cours (le document liste des tâches A→I, pas des tests).
+2. Ouvre le fichier que la tâche indique (ex : `config.py`) → implémente le TODO(LAB) **à la main**.
+3. Dans le terminal, tape la commande de **Commandes** qui correspond (`make model-train`, `make serve`…) → **lis la sortie** : si ça plante, le TODO n'est pas implémenté.
+
 ### Checklist de suivi
 
 #### Tâches
@@ -114,12 +124,12 @@ graph TD
 |-------|-------|-----------|----------------|--------|
 | 1 | A | rien | (installation des dépendances) | ✅ |
 | 2 | B | A | (outils `ruff`) | ✅ |
-| 3 | C | A, B | `config.py` : `SecurityConfig` (`api_token`) puis `InferApiSettings` | ⬜ |
-| 4 | D | A, B, C | `predictor.py` : `SklearnPredictor` | ⬜ |
+| 3 | C | A, B | `config.py` : `SecurityConfig` (`api_token`) puis `InferApiSettings` | ✅ |
+| 4 | D | A, B, C | `predictor.py` : `SklearnPredictor` | ✅ |
 | 5 | E | D | `train.py` : `build_model`, `get_model_evaluation_metrics`, `train`, `training_procedure` | ✅ |
 | 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ⬜ |
 | 7 | I | D, E, C | `cli.py` : `run_train` | ✅ |
-| 8 | G | C | (rien : `api_token` est déjà dans le TODO de `config.py`) | ⬜ |
+| 8 | G | C | (rien : `api_token` est déjà dans le TODO de `config.py`) | ✅ |
 | 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | ⬜ |
 | 10 | F | tout | (preuves de debug dans le rapport) | ⬜ |
 
@@ -132,9 +142,9 @@ graph TD
 | 3 | `build_model` : pipeline avec les 2 steps, hyperparamètres depuis la config | `train.py` | E | #5 | ✅ |
 | 4 | `get_model_evaluation_metrics` : mêmes métriques que le notebook | `train.py` | E | #5 | ✅ |
 | 5 | `train` : split + log des shapes, puis `fit` | `train.py` | E | — | ✅ |
-| 6 | `SecurityConfig` : ajouter `api_token` + validation | `config.py` | C/G | #7 | ⬜ |
-| 7 | `InferApiSettings` : déclarer les sections du service | `config.py` | C | — | ⬜ |
-| 8 | `SklearnPredictor` : implémenter la classe | `predictor.py` | D/J | #3 | ⬜ **← on continue ici** |
+| 6 | `SecurityConfig` : ajouter `api_token` + validation | `config.py` | C/G | #7 | ✅ |
+| 7 | `InferApiSettings` : déclarer les sections du service | `config.py` | C | — | ✅ |
+| 8 | `SklearnPredictor` : implémenter la classe | `predictor.py` | D/J | #3 | ✅ |
 | 9 | `load_predictor` + l'`app` de niveau module | `serve.py` | J | #1, #8 | ⬜ |
 | 10 | handler fichier (`out/logs/app.log`, toujours `DEBUG`) | `logging_setup.py` | H | #7 | ⬜ |
 | 11 | `setup_logging` : ajouter le fichier si configuré | `logging_setup.py` | H | #10 | ⬜ |
@@ -142,7 +152,7 @@ graph TD
 
 *« Dépend de » = les numéros de TODO qu'il faut avoir écrits avant. Exemple : #2 (`training_procedure`) appelle #3 (`build_model`), #4 (`get_model_evaluation_metrics`) et #5 (`train`).*
 
-**Dernière vérification (à l'instant) :** `uv run pytest -q` → 6 passes, 1 échec (`test_a_trained_model_can_be_loaded_back`). Seul blocage restant : TODO #8 (`SklearnPredictor`) ; après quoi il restera C (`config.py`), H (`logging_setup.py`), puis J (`serve.py`/`app.py`).
+**Dernière vérification (à l'instant) :** `uv run pytest -q` → 7 passes, 0 échec ; `uv run ruff check src` → 10 avertissements restants. Prochain blocage : TODO #6 (`SecurityConfig` → `api_token` + validation) puis #7 (`InferApiSettings`), #10-#11 (`logging_setup.py`), #9 (`serve.py`) et #12 (`app.py`). Ne pas oublier : copier `.env.example` → `.env` (le token `ML520_SECURITY__API_TOKEN=replace-me` y est) avant d'écrire `SecurityConfig`.
 
 ## ⚠️ Pièges récurrents
 

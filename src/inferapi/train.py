@@ -8,7 +8,6 @@ Keep the signature and write the body of the functions
 
 import logging
 from pathlib import Path
-from pyexpat import model
 
 import joblib
 import pandas as pd
@@ -26,7 +25,6 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from inferapi.config import TrainingConfig
 from inferapi.data import KNOWN_CATEGORIES, Dataset, get_dataset
-from inferapi.utils import file_creation_time
 
 logger = logging.getLogger(__name__)
 
