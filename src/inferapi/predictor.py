@@ -22,6 +22,7 @@ corporate context.
 
 from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import override
 
 import joblib
 import pandas as pd
@@ -47,6 +48,18 @@ class Predictor(ABC):
 
 # TODO(LAB): implement SklearnPredictor(Predictor): load the joblib artifact and apply the decision threshold.
 class SklearnPredictor(Predictor):
-    def __init__(self, artifact_path: Path, threshold: float = 0.5): ...
+    def __init__(self, artifact_path: Path, threshold: float = 0.5):
+        self.artifact_path = artifact_path
+        self.threshold = threshold
 
-    ...
+    @override
+    def predict(self,features):
+        model = joblib.load(self.artifact_path)
+        probabilities = model.predict_proba(features)[:,1]
+        predictions =(probabilities >= self.threshold).astype(int)
+        return (int(predictions[0]), float(probabilities[0]))
+
+    @override
+    #file_creation_path was not used
+    def get_version(self) -> str:
+        return str(file_creation_time(self.artifact_path))

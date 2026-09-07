@@ -114,8 +114,8 @@ graph TD
 |-------|-------|-----------|----------------|--------|
 | 1 | A | rien | (installation des dépendances) | ✅ |
 | 2 | B | A | (outils `ruff`) | ✅ |
-| 3 | C | A, B | `config.py` : `SecurityConfig` (`api_token`) puis `InferApiSettings` | ⬜ **← on continue ici** |
-| 4 | D | A, B, C | `predictor.py` : `SklearnPredictor` | ⬜ **← on continue ici** |
+| 3 | C | A, B | `config.py` : `SecurityConfig` (`api_token`) puis `InferApiSettings` | ⬜ |
+| 4 | D | A, B, C | `predictor.py` : `SklearnPredictor` | ⬜ |
 | 5 | E | D | `train.py` : `build_model`, `get_model_evaluation_metrics`, `train`, `training_procedure` | ✅ |
 | 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ⬜ |
 | 7 | I | D, E, C | `cli.py` : `run_train` | ✅ |
@@ -127,14 +127,14 @@ graph TD
 
 | # | TODO(LAB) | Fichier | Tâche | Dépend de | Statut |
 |---|-----------|---------|-------|-----------|--------|
-| 1 | `run_train` : charger le frame et appeler `training_procedure` | `cli.py` | I | #2, #7 | ✅ (à l'instant : plus que l'échec `SklearnPredictor`) |
+| 1 | `run_train` : charger le frame et appeler `training_procedure` | `cli.py` | I | #2, #7 | ✅ |
 | 2 | `training_procedure` : split → fit → score → log → persist | `train.py` | E | #3, #4 | ✅ |
 | 3 | `build_model` : pipeline avec les 2 steps, hyperparamètres depuis la config | `train.py` | E | #5 | ✅ |
 | 4 | `get_model_evaluation_metrics` : mêmes métriques que le notebook | `train.py` | E | #5 | ✅ |
 | 5 | `train` : split + log des shapes, puis `fit` | `train.py` | E | — | ✅ |
 | 6 | `SecurityConfig` : ajouter `api_token` + validation | `config.py` | C/G | #7 | ⬜ |
 | 7 | `InferApiSettings` : déclarer les sections du service | `config.py` | C | — | ⬜ |
-| 8 | `SklearnPredictor` : implémenter la classe | `predictor.py` | D/J | #3 | ⬜ |
+| 8 | `SklearnPredictor` : implémenter la classe | `predictor.py` | D/J | #3 | ⬜ **← on continue ici** |
 | 9 | `load_predictor` + l'`app` de niveau module | `serve.py` | J | #1, #8 | ⬜ |
 | 10 | handler fichier (`out/logs/app.log`, toujours `DEBUG`) | `logging_setup.py` | H | #7 | ⬜ |
 | 11 | `setup_logging` : ajouter le fichier si configuré | `logging_setup.py` | H | #10 | ⬜ |
