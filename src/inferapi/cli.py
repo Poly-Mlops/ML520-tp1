@@ -105,7 +105,7 @@ def run_data_convert(args: argparse.Namespace, settings: TrainingSettings) -> in
 #            and the overwrite decision this invocation asked for.
 def run_train(args: argparse.Namespace, settings: TrainingSettings) -> int:
     frame = load_raw(settings.data.parquet_path)
-    training_procedure(train_config=settings.training,dataframe=frame,  output_model_path=args.output, overwrite_model=args.override)
+    training_procedure(train_config=settings.training,dataframe=frame,  output_model_path=args.output, overwrite_model=args.overwrite)
     return 0
 
 def main() -> int:
