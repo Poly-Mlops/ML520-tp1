@@ -130,8 +130,8 @@ graph TD
 | 6 | H | C | `logging_setup.py` : handler fichier + `setup_logging` | ✅ |
 | 7 | I | D, E, C | `cli.py` : `run_train` | ✅ |
 | 8 | G | C | (rien : `api_token` est déjà dans le TODO de `config.py`) | ✅ |
-| 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | 🔶 (`serve.py` fait, `app.py` à faire) |
-| 10 | F | tout | (preuves de debug dans le rapport) | ⬜ |
+| 9 | J | C, G, H, I | `serve.py` : `load_predictor` + `app` ; `app.py` : `prediction_completed` | ✅ |
+| 10 | F | tout | (preuves de debug dans le rapport) | 🔶 (à faire : copier l'image dans `reports/img/`) |
 
 #### TODO(LAB)
 
@@ -148,14 +148,55 @@ graph TD
 | 9 | `load_predictor` + l'`app` de niveau module | `serve.py` | J | #1, #8 | ✅ |
 | 10 | handler fichier (`out/logs/app.log`, toujours `DEBUG`) | `logging_setup.py` | H | #7 | ✅ |
 | 11 | `setup_logging` : ajouter le fichier si configuré | `logging_setup.py` | H | #10 | ✅ |
-| 12 | la ligne `prediction_completed` | `app.py` | J | #9 | ⬜ |
+| 12 | la ligne `prediction_completed` | `app.py` | J | #9 | ✅ |
 
 uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
 
 
 *« Dépend de » = les numéros de TODO qu'il faut avoir écrits avant. Exemple : #2 (`training_procedure`) appelle #3 (`build_model`), #4 (`get_model_evaluation_metrics`) et #5 (`train`).*
 
-**Dernière vérification (à l'instant) :** `uv run pytest -q` → 7 passes, 0 échec ; `uv run ruff check src` → 9 avertissements restants (dans `app.py`, `cli.py`, `config.py`, `train.py`). Prochain blocage : TODO #12 (`app.py` → `prediction_completed`) et les avertissements restants. Ne pas oublier : copier `.env.example` → `.env` (le token `ML520_SECURITY__API_TOKEN=replace-me` y est) avant d'écrire `SecurityConfig`.
+**Dernière vérification (à l'instant) :** `uv run pytest -q` → 7 passes, 0 échec. **Il reste 2 corrections simples dans `src/inferapi/app.py` (voir ci-dessous), puis tout sera fini.**
+
+### Les 2 corrections restantes dans `app.py` (tâche H / question 3 / extrait de log)
+
+1. Ligne ~213 : la phrase en anglais est mal écrite (`"The prediction is finish with :request_id=%s, ..."`).
+   Remplace-la par la phrase correcte et les `%.2f`/`%.4f` :
+   ```python
+   latency_ms = (ended - started) * 1000
+   logger.info(
+       "prediction_completed request_id=%s model_version=%s latency_ms=%.2f label=%s probability=%.4f",
+       request_id, _model_version, latency_ms, label, probability,
+   )
+   ```
+2. Les `# TODO(LAB)` de `app.py` (lignes ~209-210) sont maintenant résolus : le message
+   `prediction_completed` répond à « quelle requête », « quel modèle », « combien de temps »,
+   « qu'a-t-on répondu ».
+
+### Les réponses qui restent à coller dans `reports/tp1.md` (questions du prof)
+
+**Ce qui reste à faire : les questions de `reports/tp1.md`.** Les réponses ci-dessous ne
+sont pas du code : ce sont des **pistes de réponse** pour comprendre et écrire soi-même.
+
+**Question 2** :
+
+- **Question 2** : colle les 2 lignes `model_trained` (seuil 0.5 et `--decision-threshold 0.3`)
+  dans les blocs ` ```json ` vides, puis réponds les 3 questions (accuracy du modèle « non »
+  systématique, précision/rappel selon le seuil, divergence `training.decision_threshold` ≠
+  `serving.prediction_threshold`).
+- **Question 3** : colle la ligne `settings_loaded` (montre `api_token='**********'` → `SecretStr`),
+  puis réponds : 2 objets de réglages (`TrainingSettings` n'a pas `security`, `InferApiSettings`
+  n'a pas `training`), et `replace-me` → un secret généré (jamais commité).
+- **Question 4** : `app.py` ne construit **ni** ses réglages **ni** son modèle
+  → `serve.py` passe les deux : `create_app(InferApiSettings(), load_predictor)`.
+  Si `app.py` faisait tout → impossible de tester avec modèle factice / le changer.
+  PyTorch → écrirez `TorchPredictor` et le retourner dans `load_predictor` (ou
+  `train.py` sauvegarderait avec `torch.save`).
+- **Extrait de log** : colle un passage de `out/logs/app.log` montrant
+  `prediction_started` **puis** `prediction_completed` (les 2 événements d'une requête).
+- **Débogueur** : `make serve-debug` (attend un débogueur sur port 5678), point d'arrêt
+  dans `create_app` ou `check_api_token`, puis `curl ...` → l'arrêt se déclenche.
+  Capture d'écran → `reports/img/debogueur.png` (le dossier `img` est ignoré par git ?
+  à vérifier — committez-le).
 
 ## ⚠️ Pièges récurrents
 
