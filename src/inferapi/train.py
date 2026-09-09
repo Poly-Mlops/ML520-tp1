@@ -148,8 +148,7 @@ def training_procedure(
 
     # display infos returned from what i find in notebook and used to make get_model_evaluation_metrics
     logger.info(
-        "Model infos after training ,positive_rate=%s accuracy=%s precision=%s "
-        "recall=%s roc_auc=%s average_precision=%s ",
+        "model_trained positive_rate=%s accuracy=%s precision=%s recall=%s roc_auc=%s average_precision=%s",
         metrics["positive_rate"],
         metrics["accuracy"],
         metrics["precision"],

@@ -165,7 +165,11 @@ uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
    latency_ms = (ended - started) * 1000
    logger.info(
        "prediction_completed request_id=%s model_version=%s latency_ms=%.2f label=%s probability=%.4f",
-       request_id, _model_version, latency_ms, label, probability,
+       request_id,
+       _model_version,
+       latency_ms,
+       label,
+       probability,
    )
    ```
 2. Les `# TODO(LAB)` de `app.py` (lignes ~209-210) sont maintenant résolus : le message
