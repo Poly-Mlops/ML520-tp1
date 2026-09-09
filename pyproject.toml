@@ -20,7 +20,7 @@ dependencies = [
     "pyyaml>=6.0.3",
     "uvicorn>=0.52.4",
     "gunicorn>=26.2.0",
-  
+
 ]
 
 # Command line that are installed once you installed this project
@@ -30,7 +30,7 @@ dependencies = [
 inferapi = "inferapi.cli:main"
 
 # TODO(LAB): extras. Anything that is a real feature of the project but that not
-# everyone needs installed goes here rather than in a group. 
+# everyone needs installed goes here rather than in a group.
 
 [project.optional-dependencies]
 
@@ -52,7 +52,7 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.4",
     "debugpy>=1.8.21",
-   
+
 ]
 
 [build-system]

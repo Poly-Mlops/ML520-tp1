@@ -516,7 +516,7 @@ name = "daal"
 version = "2026.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tbb", marker = "sys_platform != 'emscripten'" },
+    { name = "tbb" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7d/b4/d921fcfe2866f794c338207aa12015b37093fccec5913639bf8835866ff5/daal-2026.1.0-py2.py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:62d1a83c486dc39996887c95d5f3b0937ee6395602e556addc8d790d772b6195", size = 31988582, upload-time = "2026-06-10T07:02:25.129Z" },
@@ -731,7 +731,7 @@ notebooks = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "gunicorn", specifier = ">=26.2.0" },
-    { name = "pandas", specifier = "==2.2.3" },
+    { name = "pandas", specifier = ">=2.2.3" },
     { name = "pyarrow", specifier = ">=25.0.1" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "pydantic-settings", specifier = ">=2.15.0" },
@@ -1618,7 +1618,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "ptyprocess" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -2331,9 +2331,9 @@ name = "scikit-learn-intelex"
 version = "2026.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "daal", marker = "sys_platform != 'emscripten'" },
-    { name = "numpy", marker = "sys_platform != 'emscripten'" },
-    { name = "scikit-learn", marker = "sys_platform != 'emscripten'" },
+    { name = "daal" },
+    { name = "numpy" },
+    { name = "scikit-learn" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/11/96/f4f47046d963253bc745830ccd0d86ed04a390d40bfe3e39716d9d8b2fdf/scikit_learn_intelex-2026.1.0-py310-none-manylinux_2_28_x86_64.whl", hash = "sha256:a95529fe9cd37c46f733ab1aab351a64012f523224390c758eb6c603c48e12e5", size = 3199926, upload-time = "2026-06-10T07:02:12.963Z" },
@@ -2492,7 +2492,7 @@ name = "tbb"
 version = "2023.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tcmlib", marker = "sys_platform != 'emscripten'" },
+    { name = "tcmlib" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/25/0c/0266c71e3fa50a71db5ce8a1d0807863df3215c5f7b5fe7c98b257561138/tbb-2023.1.0-py2.py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:64ad35241c736a595498f5343abec8eaaa203e9fe0dbdbf4b86d37c5a3ab1d9c", size = 6840282, upload-time = "2026-07-01T15:10:33.348Z" },
