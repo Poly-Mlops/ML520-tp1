@@ -80,7 +80,7 @@ Si `app.py` instanciait lui-même son modèle et sa configuration, qu'est-ce qui
 
 app.py ne reçoit que ses settings et son modèle de serve.py. Si app.py construisait lui-même ses affaires, create_app() contiendrait InferApiSettings() et SklearnPredictor(...) dedans.
 
-Pour our tester app.py, il faudrait un vrai configs/config.yaml, un vrai .env avec un vrai token, et un vrai .joblib sur disque. Avec l'injection actuelle, un test peut juste passer une fausse config en mémoire et un faux modèle pas besoin de vrais fichiers.
+Pour tester app.py, il faudrait un vrai configs/config.yaml, un vrai .env avec un vrai token, et un vrai .joblib sur disque. Avec l'injection actuelle, un test peut juste passer une fausse config en mémoire et un faux modèle pas besoin de vrais fichiers.
 
 
 Enfin: que faudrait-il changer, et où exactement, pour servir un modèle PyTorch
@@ -108,6 +108,6 @@ Un court extrait de `out/logs/app.log` montrant une requête `/v1/predict` compl
 
 Capture d'écran du débogueur arrêté sur un point d'arrêt, panneau des variables
 lisible. Commitez l'image dans `reports/img/` et référencez-la ici, le bundle de
-remise la contiendra:
+remise la contiendra:ge
 
 ![Point d'arrêt](img/debogueur.png)
