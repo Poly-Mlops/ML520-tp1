@@ -11,7 +11,6 @@ requires-python = ">=3.12"
 # Everything development-only goes in a dependency group below, not here.
 dependencies = [
     "fastapi>=0.141.1",
-    "pandas==2.2.3",
     "pyarrow>=25.0.1",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.15.0",
@@ -20,7 +19,7 @@ dependencies = [
     "pyyaml>=6.0.3",
     "uvicorn>=0.52.4",
     "gunicorn>=26.2.0",
-
+    "pandas>=2.2.3",
 ]
 
 # Command line that are installed once you installed this project
