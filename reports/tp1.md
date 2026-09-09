@@ -1,6 +1,7 @@
 # TP1 - Rapport d'équipe
 
 Équipe : Group_U
+
 Membres : Abdelrahmane Ferchichi
 
 - Pour trouver les runtime dependencies, il a fallu regarder les imports dans le notebook et dans les fichiers sous `src/inferapi/`. Ce sont les dépendances nécessaires pour faire tourner l'API et le code ML.
